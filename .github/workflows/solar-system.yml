@@ -32,6 +32,12 @@ jobs:
           uses: actions/setup-node@v3
           with:
             node-version: ${{ matrix.nodejs_version }}
+
+        - name: Cache NPM dependencies
+          uses: actions/cache@v3
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
     
         - name: Install Dependencies
           run: npm install
@@ -67,13 +73,18 @@ jobs:
           uses: actions/setup-node@v3
           with:
             node-version: 18
-    
+        - name: Cache NPM dependencies
+          uses: actions/cache@v3
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+      
         - name: Install Dependencies
           run: npm install
     
         - name: Check Code Coverage
           continue-on-error: true
-          run: npm run coverage
+          run: npm run code-coverage
 
         - name: Archive Test Results
           uses: actions/upload-artifact@v3
