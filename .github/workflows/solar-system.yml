@@ -209,16 +209,17 @@ jobs:
         #   run: |
         #      telnet 172.30.1.2 6443
 
-        - name: Check Kubernetes Connectivity
-          run: |
-              kubectl cluster-info
-              kubectl get nodes
-
-        # - name: Fetching K8s cluster details
+        # - name: Check Kubernetes Connectivity
         #   run: |
-        #      kubectl version --short
-        #      echo --------------------------------------
-        #      kubectl get nodes
+        #       kubectl cluster-info
+        #       kubectl get nodes
+
+        - name: Fetching K8s cluster details
+          continue-on-error: true
+          run: |
+             kubectl version --short
+             echo --------------------------------------
+             kubectl get nodes
           
 
 
