@@ -234,6 +234,10 @@ jobs:
             IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
             INGRESS_IP: 172.232.87.200
 
+        - name: Check Files
+          run: |
+            cat kunernetes/development/*.yaml
+
 
           
 
