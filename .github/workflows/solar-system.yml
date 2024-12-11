@@ -198,6 +198,11 @@ jobs:
             method: kubeconfig
             kubeconfig: ${{ secrets.KUBECONFIG }}
 
+        - name: Telnet
+          run: |
+             curl -k https://172.30.1.2:6443
+             telnet 172.30.1.2 6443
+
         - name: Check Kubernetes Connectivity
           run: |
               kubectl cluster-info
