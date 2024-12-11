@@ -198,11 +198,16 @@ jobs:
             method: kubeconfig
             kubeconfig: ${{ secrets.KUBECONFIG }}
 
-        - name: Fetching K8s cluster details
+        - name: Check Kubernetes Connectivity
           run: |
-             kubectl version --short
-             echo -------------------------------------
-             kubectl get nodes
+              kubectl cluster-info
+              kubectl get nodes
+
+        # - name: Fetching K8s cluster details
+        #   run: |
+        #      kubectl version --short
+        #      echo -------------------------------------
+        #      kubectl get nodes
           
 
 
