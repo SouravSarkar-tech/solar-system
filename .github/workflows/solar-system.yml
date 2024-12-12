@@ -232,7 +232,7 @@ jobs:
       steps:
       - name: Test URL output using CURL and JQ
         env:
-          URL: ${{ needs.dev-deploy.outputs.APP_INGRESS_URL}}
+          URL: ${{ needs.dev-deploy.outputs.application-url}}
         run: |
           echo $URL
           echo "-----------------------------------"
