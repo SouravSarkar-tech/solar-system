@@ -127,6 +127,7 @@ jobs:
             name: Mocha-Test-Results
 
         - name: Download Code Coverage Artifacts
+          continue-on-error: true
           uses: actions/download-artifact@v3
           with:
             name: Code-Coverage-Results
