@@ -133,6 +133,7 @@ jobs:
             name: Code-Coverage-Results
 
         - name: Merge Test Files
+          continue-on-error: true
           run: |
             ls -ltr
             mkdir reports-${{ github.sha }}
