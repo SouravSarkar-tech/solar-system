@@ -2,6 +2,26 @@ name: Deployment Re-useable Workflow
 
 on:
     workflow_call:
+        inputs:
+          mongodb-uri:
+            required: true
+            type: string
+          kubectl-version:
+            description: 'Kubectl version to use'
+            default: 'v1.31.0'
+            required: false
+            type: string
+          k8s-menifest-dir:
+            description: 'Kubernetes manifest directory'
+            default: 'kubernetes/'
+            required: false
+            type: string
+          environment:
+            description: 'Environment to deploy'
+            default: 'development'
+            required: true
+            type: string
+        
         secrets:
           k8s-kubeconfig:
             required: true
@@ -12,7 +32,7 @@ jobs:
     reuse-deploy:
         runs-on: ubuntu-latest
         environment: 
-          name: development
+          name: ${{ inputs.environment }}
           url: https://${{ steps.set-ingress-host-address.outputs.APP_INGRESS_URL }}
   
         steps:
@@ -30,7 +50,7 @@ jobs:
           - name: Install Kubectl CLI
             uses: azure/setup-kubectl@v4
             with:
-              version: 'v1.31.0'
+              version: '${{ inputs.kubectl-version }}'
   
           - name: Setup KubeConfig
             uses: azure/k8s-set-context@v3
@@ -59,7 +79,7 @@ jobs:
             with:
               tokenPrefix: '_{_'
               tokenSuffix: '_}_'
-              files: '["kubernetes/development/*.yaml"]'
+              files: '["${{ inputs.k8s-menifest-dir }}*.yaml"]'
             env:
                NAMESPACE: ${{ vars.NAMESPACE }}
                REPLICAS: ${{ vars.REPLICAS}}
@@ -68,13 +88,13 @@ jobs:
   
           - name: Check Files
             run: |
-              cat kubernetes/development/*.yaml
+              cat ${{ inputs.k8s-menifest-dir }}yaml
   
           - name: Create Mongo DB secrets
             continue-on-error: true
             run: |
               kubectl -n ${{ vars.NAMESPACE }} create secret generic mongo-db-creds \
-              --from-literal=MONGO_URI=${{ env.MONGO_URI }} \
+              --from-literal=MONGO_URI=${{ inputs.mongodb-uri }} \
               --from-literal=MONGO_Username=${{ env.MONGO_Username }} \
               --from-literal=MONGO_PASSWORD=${{ secrets.mongodb-password }} \
               --save-config \
@@ -86,7 +106,7 @@ jobs:
           - name: Deploy to Dev Env
             continue-on-error: true
             run: |
-               kubectl apply -f kubernetes/deployment
+               kubectl apply -f ${{ inputs.k8s-menifest-dir }}
   
           - name: Set Up Ingress Host Url
             continue-on-error: true
