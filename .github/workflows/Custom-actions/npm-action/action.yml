@@ -1,10 +1,9 @@
 name: 'NPM Custom Action'
 description: 'Installing and Caching NPM packages'
 inputs:
-  path-of-folder:  
+  path-of-folder:
     description: 'the path to cache'
     required: true
-
 
 runs:
   using: "composite"
@@ -16,6 +15,5 @@ runs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
 
     - name: Install Dependencies
-        run: npm install
-        shell: bash
-   
+      run: npm install
+      shell: bash
