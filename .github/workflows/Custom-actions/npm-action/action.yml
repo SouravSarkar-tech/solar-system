@@ -1,10 +1,9 @@
 name: 'NPM Custom Action'
 description: 'Installing and Caching NPM packages'
 inputs:
-  path:  
+  path-of-folder:  
     description: 'the path to cache'
     required: true
-    default: 'World'
 
 
 runs:
